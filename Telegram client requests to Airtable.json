@@ -1,0 +1,230 @@
+{
+  "name": "Telegram client requests to Airtable",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d50f3056-fdb5-4ce5-a0c3-e05ed82f5490",
+      "name": "Telegram Trigger",
+      "webhookId": "7ec4d1b8-6205-443c-ae6c-26662404acf3",
+      "credentials": {
+        "telegramApi": {
+          "id": "vdMrIIMEAkI5vhM9",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d09fd2f6-5f15-4f27-ad26-070dca547680",
+              "name": "Timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "534b6ee5-c292-49b1-b468-94122a81b54c",
+              "name": "Sender",
+              "value": "={{ $json.message.from.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a5a29e3a-f0b2-4013-acdb-12adce56f897",
+              "name": "Chat",
+              "value": "={{ String($json.message.chat.id) }}",
+              "type": "string"
+            },
+            {
+              "id": "65681664-1d63-42d5-943a-b3cb4d6d9042",
+              "name": "Message text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "1fe21c51-8323-488d-8dd1-acb752483681",
+              "name": "Status",
+              "value": "New",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "58f96c96-c2c6-4b1e-beda-55ebc068b436",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app73lPb0oW7SM25Q",
+          "mode": "list",
+          "cachedResultName": "Client requests log",
+          "cachedResultUrl": "https://airtable.com/app73lPb0oW7SM25Q"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblBzLXa4Byhd4dvU",
+          "mode": "list",
+          "cachedResultName": "Requests",
+          "cachedResultUrl": "https://airtable.com/app73lPb0oW7SM25Q/tblBzLXa4Byhd4dvU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.Timestamp }}",
+            "Sender": "={{ $json.Sender }}",
+            "Chat": "={{ $json.Chat }}",
+            "Message text": "={{ $json[\"Message text\"] }}",
+            "Status": "Todo"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Sender",
+              "displayName": "Sender",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Chat",
+              "displayName": "Chat",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Message text",
+              "displayName": "Message text",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "bf044b22-8e7a-4076-8081-c64996fc0da6",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "kfVowI2W4trIQrlb",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cb7f3afe-b08e-42bc-8699-1aba36f7ae39",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "830695148bd1ae79a7685a5d7f1fa337ea0c44b5e0b04bf9816d60425264c85f"
+  },
+  "id": "ckSVMYATXh4kUoTG",
+  "tags": []
+}
